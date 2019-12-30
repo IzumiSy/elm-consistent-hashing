@@ -2,24 +2,22 @@ module ConsistentHashing exposing
     ( ConsistentHashing
     , add
     , delete
+    , getNode
     , new
     )
 
+import ConsistentHashing.Key as Key
+import ConsistentHashing.Keys as Keys
 import ConsistentHashing.Node as Node
 import ConsistentHashing.Replicas as Replicas
 import Dict
-import MD5
-
-
-type alias NodeId =
-    String
 
 
 type ConsistentHashing
     = ConsistentHashing
         { replicas : Replicas.Replicas
-        , nodes : Dict.Dict NodeId Node.Node
-        , keys : Dict.Dict NodeId String
+        , nodes : Dict.Dict Node.RawId Node.Node
+        , keys : Keys.Keys
         }
 
 
@@ -30,34 +28,47 @@ new replicas =
         (ConsistentHashing
             { replicas = replicas
             , nodes = Dict.empty
-            , keys = Dict.empty
+            , keys = Keys.empty
             }
         )
 
 
 add : Node.Node -> ConsistentHashing -> ConsistentHashing
 add node ((ConsistentHashing { replicas, nodes, keys }) as ch) =
-    if Dict.member (Node.toString node) nodes then
+    if Dict.member (Node.toRawString node) nodes then
         ch
 
     else
         let
-            nodeId =
-                MD5.hex <| Node.toString node
-
             nodeKeys =
                 replicas
                     |> Replicas.toSuffixedList node
-                    |> List.map (\rep -> ( nodeId, MD5.hex rep ))
-                    |> Dict.fromList
+                    |> List.map (\rep -> ( node, Key.new rep ))
         in
         ConsistentHashing
             { replicas = replicas
-            , nodes = Dict.insert nodeId node nodes
-            , keys = Dict.union nodeKeys keys
+            , nodes = Dict.insert (Node.toRawString node) node nodes
+            , keys = Keys.append nodeKeys keys
             }
 
 
 delete : Node.Node -> ConsistentHashing -> ConsistentHashing
 delete node ch =
     ch
+
+
+getNode : Key.Key -> ConsistentHashing -> Maybe Node.Node
+getNode newKey (ConsistentHashing { nodes, keys }) =
+    keys
+        |> Keys.find newKey
+        |> Maybe.andThen
+            (\nodeId ->
+                case Dict.get nodeId nodes of
+                    Just node ->
+                        Just node
+
+                    Nothing ->
+                        keys
+                            |> Keys.default
+                            |> Maybe.andThen (\headingNodeId -> Dict.get headingNodeId nodes)
+            )

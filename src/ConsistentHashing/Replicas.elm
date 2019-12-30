@@ -33,4 +33,4 @@ toSuffixedList node (Replicas value) =
     value
         |> List.range 0
         |> List.map String.fromInt
-        |> List.map (\repNum -> String.concat [ Node.toString node, "_", repNum ])
+        |> List.map (\repNum -> String.concat [ Node.toRawString node, "_", repNum ])
