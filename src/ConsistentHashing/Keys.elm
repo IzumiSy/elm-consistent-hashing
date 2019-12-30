@@ -31,7 +31,7 @@ append keys (Keys currentKeys) =
 
 remove : Node.Node -> Keys -> Keys
 remove targetNode (Keys keys) =
-    Keys <| List.filter (\( node, _ ) -> not (Node.isEqual node targetNode)) keys
+    Keys <| ExList.filterNot (\( node, _ ) -> Node.toString node == Node.toString targetNode) keys
 
 
 find : Key.Key -> Keys -> Maybe Node.Node

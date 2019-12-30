@@ -59,7 +59,7 @@ suite =
                         (\value ->
                             ch
                                 |> ConsistentHashing.getNode (Key.new value)
-                                |> Maybe.map Node.toRawString
+                                |> Maybe.map Node.toString
                         )
                     |> Expect.equalLists
                         (List.map (Just << Tuple.second) sourceAndResults)

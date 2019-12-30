@@ -47,13 +47,13 @@ new replicas =
 -}
 add : Node.Node -> ConsistentHashing -> ConsistentHashing
 add node ((ConsistentHashing { replicas, nodes, keys }) as ch) =
-    if Dict.member (Node.toRawString node) nodes then
+    if Dict.member (Node.toString node) nodes then
         ch
 
     else
         ConsistentHashing
             { replicas = replicas
-            , nodes = Dict.insert (Node.toRawString node) node nodes
+            , nodes = Dict.insert (Node.toString node) node nodes
             , keys =
                 Keys.append
                     (replicas
@@ -70,7 +70,7 @@ remove : Node.Node -> ConsistentHashing -> ConsistentHashing
 remove node (ConsistentHashing { replicas, nodes, keys }) =
     ConsistentHashing
         { replicas = replicas
-        , nodes = Dict.remove (Node.toRawString node) nodes
+        , nodes = Dict.remove (Node.toString node) nodes
         , keys = Keys.remove node keys
         }
 
@@ -83,12 +83,12 @@ getNode newKey (ConsistentHashing { nodes, keys }) =
         |> Keys.find newKey
         |> Maybe.andThen
             (\node ->
-                case Dict.get (Node.toRawString node) nodes of
+                case Dict.get (Node.toString node) nodes of
                     Just foundNode ->
                         Just foundNode
 
                     Nothing ->
                         keys
                             |> Keys.default
-                            |> Maybe.andThen (\headingNode -> Dict.get (Node.toRawString headingNode) nodes)
+                            |> Maybe.andThen (\headingNode -> Dict.get (Node.toString headingNode) nodes)
             )

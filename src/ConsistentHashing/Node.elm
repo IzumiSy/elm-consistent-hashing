@@ -1,9 +1,15 @@
 module ConsistentHashing.Node exposing
     ( Node
-    , isEqual
-    , new
-    , toRawString
+    , new, toString
     )
+
+{-|
+
+@docs Node
+
+@docs new, toString
+
+-}
 
 
 type Node
@@ -15,11 +21,6 @@ new value =
     Node value
 
 
-toRawString : Node -> String
-toRawString (Node value) =
+toString : Node -> String
+toString (Node value) =
     value
-
-
-isEqual : Node -> Node -> Bool
-isEqual (Node a) (Node b) =
-    a == b
