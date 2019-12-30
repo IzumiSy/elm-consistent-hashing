@@ -21,6 +21,8 @@ import ConsistentHashing.Replica as Replica
 import Dict
 
 
+{-| A data structure for consistent hashing
+-}
 type ConsistentHashing
     = ConsistentHashing
         { replica : Replica.Replica

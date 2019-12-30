@@ -24,11 +24,15 @@ type Replica
     = Replica Int
 
 
+{-| Creates a new replica size
+-}
 new : Int -> Replica
 new =
     Replica
 
 
+{-| A default replica size
+-}
 default : Replica
 default =
     Replica 100
