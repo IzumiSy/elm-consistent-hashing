@@ -5,7 +5,10 @@
     "license": "MIT",
     "version": "1.0.0",
     "exposed-modules": [
-        "ConsistentHashing"
+        "ConsistentHashing",
+        "ConsistentHashing.Key",
+        "ConsistentHashing.Node",
+        "ConsistentHashing.Replicas"
     ],
     "elm-version": "0.19.0 <= v < 2.0.0",
     "dependencies": {
