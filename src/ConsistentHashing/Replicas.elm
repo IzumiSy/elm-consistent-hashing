@@ -1,4 +1,4 @@
-﻿module ConsistentHashing.Replicas exposing
+module ConsistentHashing.Replicas exposing
     ( Replicas
     , default
     , new
@@ -10,10 +10,10 @@ type Replicas
 
 
 new : Int -> Replicas
-new value =
+new =
     Replicas
 
 
 default : Replicas
 default =
-    100
+    Replicas 100

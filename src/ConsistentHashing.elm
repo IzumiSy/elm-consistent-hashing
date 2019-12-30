@@ -1,4 +1,4 @@
-﻿module ConsistentHashing exposing
+module ConsistentHashing exposing
     ( ConsistentHashing
     , new
     )
@@ -6,26 +6,21 @@
 import ConsistentHashing.Node as Node
 import ConsistentHashing.Replicas as Replicas
 import Dict
-import Set
 
 
 type ConsistentHashing
     = ConsistentHashing
-        { nodes : Dict.Dict String Node.Node
-        , replicas : Replicas.Replicas
+        { replicas : Replicas.Replicas
+        , nodes : Dict.Dict String Node.Node
         }
 
 
-new : Replicas -> List Node.Node -> ConsistentHashing
+new : Replicas.Replicas -> List Node.Node -> ConsistentHashing
 new replicas nodes =
-    let
-        nodeSet =
-            nodes
-                |> List.map Node.toString
-                |> Set.fromList nodes
-                |> Set.toList
-    in
     ConsistentHashing
-        { nodes = Dict.empty
-        , replicas = replicas
+        { replicas = replicas
+        , nodes =
+            nodes
+                |> List.map (\node -> ( Node.toString node, node ))
+                |> Dict.fromList
         }

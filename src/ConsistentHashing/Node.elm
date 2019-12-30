@@ -1,4 +1,4 @@
-﻿module ConsistentHashing.Node exposing
+module ConsistentHashing.Node exposing
     ( Node
     , new
     , toString
