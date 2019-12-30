@@ -37,7 +37,7 @@ remove targetNode (Keys keys) =
 find : Key.Key -> Keys -> Maybe Node.Node
 find targetKey (Keys keys) =
     keys
-        |> ExList.find (\( _, key ) -> Key.isAssignable key targetKey)
+        |> ExList.find (\( _, key ) -> isAssignable key targetKey)
         |> Maybe.map Tuple.first
 
 
@@ -46,3 +46,8 @@ default (Keys keys) =
     keys
         |> List.head
         |> Maybe.map Tuple.first
+
+
+isAssignable : Key.Key -> Key.Key -> Bool
+isAssignable a b =
+    Key.toString a >= Key.toString b

@@ -6,7 +6,7 @@
 ```elm
 import ConsistentHashing as (ConsistentHashing)
 import ConsistentHashing.Node as Node
-import ConsistentHashing.Replicas as Replicas
+import ConsistentHashing.Replica as Replica
 
 
 
@@ -24,7 +24,7 @@ init : Model
 init =
     { ch =
         ConsistentHashing.new
-            Replicas.default
+            Replica.default
             [ Node.new "node1"
             , Node.new "node2"
             , Node.new "node3"

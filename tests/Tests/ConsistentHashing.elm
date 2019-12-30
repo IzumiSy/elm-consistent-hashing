@@ -3,7 +3,7 @@ module Tests.ConsistentHashing exposing (suite)
 import ConsistentHashing as ConsistentHashing
 import ConsistentHashing.Key as Key
 import ConsistentHashing.Node as Node
-import ConsistentHashing.Replicas as Replicas
+import ConsistentHashing.Replica as Replica
 import Expect
 import Test exposing (Test, describe, test)
 
@@ -38,7 +38,7 @@ suite =
         [ test "new" <|
             \_ ->
                 []
-                    |> ConsistentHashing.new Replicas.default
+                    |> ConsistentHashing.new Replica.default
                     |> ConsistentHashing.getNode (Key.new "A")
                     |> Expect.equal Nothing
         , test "add" <|
@@ -46,7 +46,7 @@ suite =
                 let
                     ch =
                         ConsistentHashing.new
-                            Replicas.default
+                            Replica.default
                             [ Node.new "node1"
                             , Node.new "node2"
                             , Node.new "node3"

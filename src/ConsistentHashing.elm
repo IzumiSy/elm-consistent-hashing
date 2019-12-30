@@ -17,13 +17,13 @@ module ConsistentHashing exposing
 import ConsistentHashing.Key as Key
 import ConsistentHashing.Keys as Keys
 import ConsistentHashing.Node as Node
-import ConsistentHashing.Replicas as Replicas
+import ConsistentHashing.Replica as Replica
 import Dict
 
 
 type ConsistentHashing
     = ConsistentHashing
-        { replicas : Replicas.Replicas
+        { replica : Replica.Replica
         , nodes : Dict.Dict String Node.Node
         , keys : Keys.Keys
         }
@@ -31,12 +31,12 @@ type ConsistentHashing
 
 {-| Creates a new ConsistentHashing data
 -}
-new : Replicas.Replicas -> List Node.Node -> ConsistentHashing
-new replicas =
+new : Replica.Replica -> List Node.Node -> ConsistentHashing
+new replica =
     List.foldl
         add
         (ConsistentHashing
-            { replicas = replicas
+            { replica = replica
             , nodes = Dict.empty
             , keys = Keys.empty
             }
@@ -46,18 +46,18 @@ new replicas =
 {-| Adds a node
 -}
 add : Node.Node -> ConsistentHashing -> ConsistentHashing
-add node ((ConsistentHashing { replicas, nodes, keys }) as ch) =
+add node ((ConsistentHashing { replica, nodes, keys }) as ch) =
     if Dict.member (Node.toString node) nodes then
         ch
 
     else
         ConsistentHashing
-            { replicas = replicas
+            { replica = replica
             , nodes = Dict.insert (Node.toString node) node nodes
             , keys =
                 Keys.append
-                    (replicas
-                        |> Replicas.toSuffixedKeyList node
+                    (replica
+                        |> Replica.toSuffixedKeyList node
                         |> List.map (\key -> ( node, key ))
                     )
                     keys
@@ -67,9 +67,9 @@ add node ((ConsistentHashing { replicas, nodes, keys }) as ch) =
 {-| Removes a node
 -}
 remove : Node.Node -> ConsistentHashing -> ConsistentHashing
-remove node (ConsistentHashing { replicas, nodes, keys }) =
+remove node (ConsistentHashing { replica, nodes, keys }) =
     ConsistentHashing
-        { replicas = replicas
+        { replica = replica
         , nodes = Dict.remove (Node.toString node) nodes
         , keys = Keys.remove node keys
         }
