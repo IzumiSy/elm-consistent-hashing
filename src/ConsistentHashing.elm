@@ -4,7 +4,7 @@ module ConsistentHashing exposing
     , getNode
     )
 
-{-| Consistent hashing module for Elm
+{-| A pure Elm Consistent hashing module
 
 @docs ConsistentHashing
 

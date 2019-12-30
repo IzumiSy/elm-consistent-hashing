@@ -1,2 +1,2 @@
 # elm-consistent-hashing
-A module for consistent hashing algorithm with pure Elm
+A pure Elm consistent hashing module
