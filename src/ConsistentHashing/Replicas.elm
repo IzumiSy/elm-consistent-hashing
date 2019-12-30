@@ -3,9 +3,10 @@ module ConsistentHashing.Replicas exposing
     , default
     , new
     , toInt
-    , toSuffixedList
+    , toSuffixedKeyList
     )
 
+import ConsistentHashing.Key as Key
 import ConsistentHashing.Node as Node
 
 
@@ -28,9 +29,9 @@ toInt (Replicas value) =
     value
 
 
-toSuffixedList : Node.Node -> Replicas -> List String
-toSuffixedList node (Replicas value) =
+toSuffixedKeyList : Node.Node -> Replicas -> List Key.Key
+toSuffixedKeyList node (Replicas value) =
     value
         |> List.range 0
         |> List.map String.fromInt
-        |> List.map (\repNum -> String.concat [ Node.toRawString node, "_", repNum ])
+        |> List.map (\repNum -> Key.new <| String.concat [ Node.toRawString node, "_", repNum ])

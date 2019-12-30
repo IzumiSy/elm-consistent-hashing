@@ -6,11 +6,7 @@ module ConsistentHashing.Node exposing
     , toRawString
     )
 
-import MD5
-
-
-type alias HashedId =
-    String
+import ConsistentHashing.Key as Key
 
 
 type alias RawId =
@@ -18,15 +14,15 @@ type alias RawId =
 
 
 type Node
-    = Node RawId HashedId
+    = Node RawId Key.Key
 
 
 new : String -> Node
 new value =
-    Node value (MD5.hex value)
+    Node value (Key.new value)
 
 
-toHashedString : Node -> String
+toHashedString : Node -> Key.Key
 toHashedString (Node _ value) =
     value
 

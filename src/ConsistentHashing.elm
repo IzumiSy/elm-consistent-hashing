@@ -1,9 +1,9 @@
 module ConsistentHashing exposing
     ( ConsistentHashing
     , add
-    , delete
     , getNode
     , new
+    , remove
     )
 
 import ConsistentHashing.Key as Key
@@ -39,22 +39,26 @@ add node ((ConsistentHashing { replicas, nodes, keys }) as ch) =
         ch
 
     else
-        let
-            nodeKeys =
-                replicas
-                    |> Replicas.toSuffixedList node
-                    |> List.map (\rep -> ( node, Key.new rep ))
-        in
         ConsistentHashing
             { replicas = replicas
             , nodes = Dict.insert (Node.toRawString node) node nodes
-            , keys = Keys.append nodeKeys keys
+            , keys =
+                Keys.append
+                    (replicas
+                        |> Replicas.toSuffixedKeyList node
+                        |> List.map (\key -> ( node, key ))
+                    )
+                    keys
             }
 
 
-delete : Node.Node -> ConsistentHashing -> ConsistentHashing
-delete node ch =
-    ch
+remove : Node.Node -> ConsistentHashing -> ConsistentHashing
+remove node (ConsistentHashing { replicas, nodes, keys }) =
+    ConsistentHashing
+        { replicas = replicas
+        , nodes = Dict.remove (Node.toRawString node) nodes
+        , keys = Keys.remove node keys
+        }
 
 
 getNode : Key.Key -> ConsistentHashing -> Maybe Node.Node

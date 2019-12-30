@@ -4,6 +4,7 @@ module ConsistentHashing.Keys exposing
     , default
     , empty
     , find
+    , remove
     )
 
 import ConsistentHashing.Key as Key
@@ -27,6 +28,11 @@ append keys (Keys currentKeys) =
         |> (++) currentKeys
         |> List.sortBy (Key.toString << Tuple.second)
         |> Keys
+
+
+remove : Node.Node -> Keys -> Keys
+remove node (Keys keys) =
+    Keys <| List.filter (\( nodeId, _ ) -> not (nodeId == Node.toRawString node)) keys
 
 
 find : Key.Key -> Keys -> Maybe Node.RawId

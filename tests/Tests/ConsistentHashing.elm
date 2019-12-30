@@ -10,16 +10,14 @@ import Test exposing (Test, describe, test)
 
 suite : Test
 suite =
-    describe "new"
-        [ test "returns Nothing in no node available" <|
+    describe "ConsistentHashing"
+        [ test "new" <|
             \_ ->
                 []
                     |> ConsistentHashing.new Replicas.default
                     |> ConsistentHashing.getNode (Key.new "A")
                     |> Expect.equal Nothing
-        , test
-            "name"
-          <|
+        , test "add" <|
             \_ ->
                 let
                     ch =
