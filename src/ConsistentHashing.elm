@@ -1,15 +1,14 @@
 module ConsistentHashing exposing
     ( ConsistentHashing
-    , new, add
+    , new, add, remove
     , getNode
-    , remove
     )
 
 {-| Consistent hashing module for Elm
 
 @docs ConsistentHashing
 
-@docs new, add, remote
+@docs new, add, remove
 
 @docs getNode
 
