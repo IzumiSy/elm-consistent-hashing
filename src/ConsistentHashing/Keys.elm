@@ -13,7 +13,7 @@ import List.Extra as ExList
 
 
 type Keys
-    = Keys (List ( Node.RawId, Key.Key ))
+    = Keys (List ( Node.Node, Key.Key ))
 
 
 empty : Keys
@@ -24,25 +24,24 @@ empty =
 append : List ( Node.Node, Key.Key ) -> Keys -> Keys
 append keys (Keys currentKeys) =
     keys
-        |> List.map (Tuple.mapFirst Node.toRawString)
         |> (++) currentKeys
         |> List.sortBy (Key.toString << Tuple.second)
         |> Keys
 
 
 remove : Node.Node -> Keys -> Keys
-remove node (Keys keys) =
-    Keys <| List.filter (\( nodeId, _ ) -> not (nodeId == Node.toRawString node)) keys
+remove targetNode (Keys keys) =
+    Keys <| List.filter (\( node, _ ) -> not (Node.isEqual node targetNode)) keys
 
 
-find : Key.Key -> Keys -> Maybe Node.RawId
+find : Key.Key -> Keys -> Maybe Node.Node
 find targetKey (Keys keys) =
     keys
-        |> ExList.find (\( _, key ) -> Key.toString key >= Key.toString targetKey)
+        |> ExList.find (\( _, key ) -> Key.isAssignable key targetKey)
         |> Maybe.map Tuple.first
 
 
-default : Keys -> Maybe Node.RawId
+default : Keys -> Maybe Node.Node
 default (Keys keys) =
     keys
         |> List.head

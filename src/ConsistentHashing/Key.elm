@@ -1,5 +1,6 @@
 module ConsistentHashing.Key exposing
     ( Key
+    , isAssignable
     , new
     , toString
     )
@@ -19,3 +20,8 @@ new =
 toString : Key -> String
 toString (Key value) =
     value
+
+
+isAssignable : Key -> Key -> Bool
+isAssignable (Key a) (Key b) =
+    a >= b

@@ -16,7 +16,7 @@ import Dict
 type ConsistentHashing
     = ConsistentHashing
         { replicas : Replicas.Replicas
-        , nodes : Dict.Dict Node.RawId Node.Node
+        , nodes : Dict.Dict String Node.Node
         , keys : Keys.Keys
         }
 
@@ -66,13 +66,13 @@ getNode newKey (ConsistentHashing { nodes, keys }) =
     keys
         |> Keys.find newKey
         |> Maybe.andThen
-            (\nodeId ->
-                case Dict.get nodeId nodes of
-                    Just node ->
-                        Just node
+            (\node ->
+                case Dict.get (Node.toRawString node) nodes of
+                    Just foundNode ->
+                        Just foundNode
 
                     Nothing ->
                         keys
                             |> Keys.default
-                            |> Maybe.andThen (\headingNodeId -> Dict.get headingNodeId nodes)
+                            |> Maybe.andThen (\headingNode -> Dict.get (Node.toRawString headingNode) nodes)
             )

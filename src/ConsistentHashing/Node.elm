@@ -1,32 +1,25 @@
 module ConsistentHashing.Node exposing
     ( Node
-    , RawId
+    , isEqual
     , new
-    , toHashedString
     , toRawString
     )
 
-import ConsistentHashing.Key as Key
-
-
-type alias RawId =
-    String
-
 
 type Node
-    = Node RawId Key.Key
+    = Node String
 
 
 new : String -> Node
 new value =
-    Node value (Key.new value)
-
-
-toHashedString : Node -> Key.Key
-toHashedString (Node _ value) =
-    value
+    Node value
 
 
 toRawString : Node -> String
-toRawString (Node value _) =
+toRawString (Node value) =
     value
+
+
+isEqual : Node -> Node -> Bool
+isEqual (Node a) (Node b) =
+    a == b
