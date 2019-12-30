@@ -1,9 +1,16 @@
 module ConsistentHashing.Key exposing
     ( Key
-    , isAssignable
     , new
-    , toString
+    , isAssignable, toString
     )
+
+{-|
+
+@docs Key
+
+@docs new
+
+-}
 
 import MD5
 

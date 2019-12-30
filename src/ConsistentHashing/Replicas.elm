@@ -1,10 +1,16 @@
 module ConsistentHashing.Replicas exposing
     ( Replicas
-    , default
-    , new
-    , toInt
-    , toSuffixedKeyList
+    , new, default
+    , toInt, toSuffixedKeyList
     )
+
+{-|
+
+@docs Replicas
+
+@docs new, default
+
+-}
 
 import ConsistentHashing.Key as Key
 import ConsistentHashing.Node as Node

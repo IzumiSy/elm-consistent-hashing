@@ -1,10 +1,19 @@
 module ConsistentHashing exposing
     ( ConsistentHashing
-    , add
+    , new, add
     , getNode
-    , new
     , remove
     )
+
+{-| Consistent hashing module for Elm
+
+@docs ConsistentHashing
+
+@docs new, add, remote
+
+@docs getNode
+
+-}
 
 import ConsistentHashing.Key as Key
 import ConsistentHashing.Keys as Keys
@@ -21,6 +30,8 @@ type ConsistentHashing
         }
 
 
+{-| Creates a new ConsistentHashing data
+-}
 new : Replicas.Replicas -> List Node.Node -> ConsistentHashing
 new replicas =
     List.foldl
@@ -33,6 +44,8 @@ new replicas =
         )
 
 
+{-| Adds a node
+-}
 add : Node.Node -> ConsistentHashing -> ConsistentHashing
 add node ((ConsistentHashing { replicas, nodes, keys }) as ch) =
     if Dict.member (Node.toRawString node) nodes then
@@ -52,6 +65,8 @@ add node ((ConsistentHashing { replicas, nodes, keys }) as ch) =
             }
 
 
+{-| Removes a node
+-}
 remove : Node.Node -> ConsistentHashing -> ConsistentHashing
 remove node (ConsistentHashing { replicas, nodes, keys }) =
     ConsistentHashing
@@ -61,6 +76,8 @@ remove node (ConsistentHashing { replicas, nodes, keys }) =
         }
 
 
+{-| Gets one node by key
+-}
 getNode : Key.Key -> ConsistentHashing -> Maybe Node.Node
 getNode newKey (ConsistentHashing { nodes, keys }) =
     keys
