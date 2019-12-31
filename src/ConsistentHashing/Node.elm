@@ -12,7 +12,7 @@ module ConsistentHashing.Node exposing
 -}
 
 
-{-| Distributable node
+{-| A node for distribution
 -}
 type Node
     = Node String

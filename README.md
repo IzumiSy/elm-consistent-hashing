@@ -4,7 +4,7 @@
 
 ## Example
 ```elm
-import ConsistentHashing as (ConsistentHashing)
+import ConsistentHashing as ConsistentHashing
 import ConsistentHashing.Node as Node
 import ConsistentHashing.Replica as Replica
 

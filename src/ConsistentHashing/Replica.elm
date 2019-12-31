@@ -31,7 +31,7 @@ new =
     Replica
 
 
-{-| A default replica size
+{-| A default replica size (100)
 -}
 default : Replica
 default =
