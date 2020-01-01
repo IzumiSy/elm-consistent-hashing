@@ -3,7 +3,7 @@
     "name": "IzumiSy/elm-consistent-hashing",
     "summary": "A module for consistent hashing",
     "license": "MIT",
-    "version": "1.0.1",
+    "version": "2.0.0",
     "exposed-modules": [
         "ConsistentHashing",
         "ConsistentHashing.Key",
