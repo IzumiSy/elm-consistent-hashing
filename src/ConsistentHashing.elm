@@ -32,11 +32,16 @@ type ConsistentHashing
 
 
 {-| Creates a new ConsistentHashing data
+
+`new` function only takes one initial node at first. This interface is like non-empty list which aims to ensure one node always available at least for distribution.
+
+If you want, you can add some more nodes one by one using `add` function.
+
 -}
-new : Replica.Replica -> List Node.Node -> ConsistentHashing
-new replica =
-    List.foldl
-        add
+new : Replica.Replica -> Node.Node -> ConsistentHashing
+new replica initialNode =
+    add
+        initialNode
         (ConsistentHashing
             { replica = replica
             , nodes = Dict.empty

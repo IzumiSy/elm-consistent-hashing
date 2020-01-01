@@ -18,40 +18,17 @@ suite =
             , ( "D", "node4" )
             , ( "E", "node1" )
             , ( "F", "node4" )
-            , ( "G", "node3" )
-            , ( "H", "node1" )
-            , ( "I", "node2" )
-            , ( "J", "node4" )
-            , ( "K", "node2" )
-            , ( "L", "node3" )
-            , ( "O", "node4" )
-            , ( "P", "node2" )
-            , ( "Q", "node4" )
-            , ( "R", "node4" )
-            , ( "S", "node2" )
-            , ( "T", "node2" )
-            , ( "U", "node1" )
-            , ( "V", "node2" )
             ]
     in
     describe "ConsistentHashing"
-        [ test "new" <|
-            \_ ->
-                []
-                    |> ConsistentHashing.new Replica.default
-                    |> ConsistentHashing.getNode (Key.new "A")
-                    |> Expect.equal Nothing
-        , test "add" <|
+        [ test "add" <|
             \_ ->
                 let
                     ch =
-                        ConsistentHashing.new
-                            Replica.default
-                            [ Node.new "node1"
-                            , Node.new "node2"
-                            , Node.new "node3"
-                            , Node.new "node4"
-                            ]
+                        ConsistentHashing.new Replica.default (Node.new "node1")
+                            |> ConsistentHashing.add (Node.new "node2")
+                            |> ConsistentHashing.add (Node.new "node3")
+                            |> ConsistentHashing.add (Node.new "node4")
                 in
                 sourceAndResults
                     |> List.map Tuple.first
