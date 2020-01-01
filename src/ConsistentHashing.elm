@@ -63,17 +63,23 @@ add node ((ConsistentHashing { replica, nodes, keys, head }) as ch) =
         ch
 
     else
-        ConsistentHashing
-            { replica = replica
-            , nodes = Dict.insert (Node.toString node) node nodes
-            , head = head
-            , keys =
+        let
+            nextKeys =
                 Keys.append
                     (replica
                         |> Replica.toSuffixedKeyList node
                         |> List.map (\key -> ( node, key ))
                     )
                     keys
+        in
+        ConsistentHashing
+            { replica = replica
+            , nodes = Dict.insert (Node.toString node) node nodes
+            , keys = nextKeys
+            , head =
+                nextKeys
+                    |> Keys.head
+                    |> Maybe.withDefault head
             }
 
 
@@ -84,11 +90,18 @@ This function actually does not remove all nodes. The node added with `new` func
 -}
 remove : Node.Node -> ConsistentHashing -> ConsistentHashing
 remove node (ConsistentHashing { replica, nodes, keys, head }) =
+    let
+        nextKeys =
+            Keys.remove node keys
+    in
     ConsistentHashing
         { replica = replica
         , nodes = Dict.remove (Node.toString node) nodes
-        , head = head
-        , keys = Keys.remove node keys
+        , keys = nextKeys
+        , head =
+            nextKeys
+                |> Keys.head
+                |> Maybe.withDefault head
         }
 
 

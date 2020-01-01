@@ -3,6 +3,7 @@ module ConsistentHashing.Keys exposing
     , append
     , empty
     , find
+    , head
     , remove
     )
 
@@ -37,6 +38,13 @@ find : Key.Key -> Keys -> Maybe Node.Node
 find targetKey (Keys keys) =
     keys
         |> ExList.find (\( _, key ) -> isAssignable key targetKey)
+        |> Maybe.map Tuple.first
+
+
+head : Keys -> Maybe Node.Node
+head (Keys keys) =
+    keys
+        |> List.head
         |> Maybe.map Tuple.first
 
 
