@@ -61,23 +61,23 @@ suite =
                             |> ConsistentHashing.add node3
                             |> ConsistentHashing.add node4
                             |> ConsistentHashing.remove node1
-                            |> ConsistentHashing.remove node3
-                            |> ConsistentHashing.remove node2
+                            |> Maybe.andThen (ConsistentHashing.remove node3)
+                            |> Maybe.andThen (ConsistentHashing.remove node2)
                 in
                 sourceAndResults
                     |> List.map Tuple.first
                     |> List.map
                         (\value ->
                             ch
-                                |> ConsistentHashing.getNode (Key.new value)
-                                |> Node.toString
+                                |> Maybe.map (ConsistentHashing.getNode (Key.new value))
+                                |> Maybe.map Node.toString
                         )
                     |> Expect.equalLists
-                        [ "node4"
-                        , "node4"
-                        , "node4"
-                        , "node4"
-                        , "node4"
-                        , "node4"
+                        [ Just "node4"
+                        , Just "node4"
+                        , Just "node4"
+                        , Just "node4"
+                        , Just "node4"
+                        , Just "node4"
                         ]
         ]

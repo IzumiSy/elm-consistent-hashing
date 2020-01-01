@@ -85,24 +85,26 @@ add node ((ConsistentHashing { replica, nodes, keys, head }) as ch) =
 
 {-| Removes a node
 
-This function actually does not remove all nodes. The node added with `new` function is irremovable.
+This function returns Nothing if all nodes were removed.
 
 -}
-remove : Node.Node -> ConsistentHashing -> ConsistentHashing
+remove : Node.Node -> ConsistentHashing -> Maybe ConsistentHashing
 remove node (ConsistentHashing { replica, nodes, keys, head }) =
     let
         nextKeys =
             Keys.remove node keys
     in
-    ConsistentHashing
-        { replica = replica
-        , nodes = Dict.remove (Node.toString node) nodes
-        , keys = nextKeys
-        , head =
-            nextKeys
-                |> Keys.head
-                |> Maybe.withDefault head
-        }
+    nextKeys
+        |> Keys.head
+        |> Maybe.map
+            (\nextHead ->
+                ConsistentHashing
+                    { replica = replica
+                    , nodes = Dict.remove (Node.toString node) nodes
+                    , keys = nextKeys
+                    , head = nextHead
+                    }
+            )
 
 
 {-| Gets one node by key
