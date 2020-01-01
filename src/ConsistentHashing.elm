@@ -27,6 +27,7 @@ type ConsistentHashing
     = ConsistentHashing
         { replica : Replica.Replica
         , nodes : Dict.Dict String Node.Node
+        , head : Node.Node
         , keys : Keys.Keys
         }
 
@@ -40,20 +41,24 @@ If you want, you can add some more nodes one by one using `add` function.
 -}
 new : Replica.Replica -> Node.Node -> ConsistentHashing
 new replica initialNode =
-    add
-        initialNode
-        (ConsistentHashing
-            { replica = replica
-            , nodes = Dict.empty
-            , keys = Keys.empty
-            }
-        )
+    ConsistentHashing
+        { replica = replica
+        , nodes = Dict.insert (Node.toString initialNode) initialNode Dict.empty
+        , head = initialNode
+        , keys =
+            Keys.append
+                (replica
+                    |> Replica.toSuffixedKeyList initialNode
+                    |> List.map (\key -> ( initialNode, key ))
+                )
+                Keys.empty
+        }
 
 
 {-| Adds a node
 -}
 add : Node.Node -> ConsistentHashing -> ConsistentHashing
-add node ((ConsistentHashing { replica, nodes, keys }) as ch) =
+add node ((ConsistentHashing { replica, nodes, keys, head }) as ch) =
     if Dict.member (Node.toString node) nodes then
         ch
 
@@ -61,6 +66,7 @@ add node ((ConsistentHashing { replica, nodes, keys }) as ch) =
         ConsistentHashing
             { replica = replica
             , nodes = Dict.insert (Node.toString node) node nodes
+            , head = head
             , keys =
                 Keys.append
                     (replica
@@ -72,30 +78,25 @@ add node ((ConsistentHashing { replica, nodes, keys }) as ch) =
 
 
 {-| Removes a node
+
+This function actually does not remove all nodes. The node added with `new` function is irremovable.
+
 -}
 remove : Node.Node -> ConsistentHashing -> ConsistentHashing
-remove node (ConsistentHashing { replica, nodes, keys }) =
+remove node (ConsistentHashing { replica, nodes, keys, head }) =
     ConsistentHashing
         { replica = replica
         , nodes = Dict.remove (Node.toString node) nodes
+        , head = head
         , keys = Keys.remove node keys
         }
 
 
 {-| Gets one node by key
 -}
-getNode : Key.Key -> ConsistentHashing -> Maybe Node.Node
-getNode newKey (ConsistentHashing { nodes, keys }) =
+getNode : Key.Key -> ConsistentHashing -> Node.Node
+getNode newKey (ConsistentHashing { nodes, keys, head }) =
     keys
         |> Keys.find newKey
-        |> Maybe.andThen
-            (\node ->
-                case Dict.get (Node.toString node) nodes of
-                    Just foundNode ->
-                        Just foundNode
-
-                    Nothing ->
-                        keys
-                            |> Keys.default
-                            |> Maybe.andThen (\headingNode -> Dict.get (Node.toString headingNode) nodes)
-            )
+        |> Maybe.andThen (\node -> Dict.get (Node.toString node) nodes)
+        |> Maybe.withDefault head

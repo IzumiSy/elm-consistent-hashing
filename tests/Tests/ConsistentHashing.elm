@@ -36,8 +36,8 @@ suite =
                         (\value ->
                             ch
                                 |> ConsistentHashing.getNode (Key.new value)
-                                |> Maybe.map Node.toString
+                                |> Node.toString
                         )
                     |> Expect.equalLists
-                        (List.map (Just << Tuple.second) sourceAndResults)
+                        (List.map Tuple.second sourceAndResults)
         ]
