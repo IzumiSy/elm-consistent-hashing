@@ -14,7 +14,7 @@ import ConsistentHashing.Replica as Replica
 
 
 type alias Model =
-    { ch : ConsistentHashing }
+    { ch : ConsistentHashing.ConsistentHashing }
 
 
 -- init
@@ -23,13 +23,10 @@ type alias Model =
 init : Model
 init =
     { ch =
-        ConsistentHashing.new
-            Replica.default
-            [ Node.new "node1"
-            , Node.new "node2"
-            , Node.new "node3"
-            , Node.new "node4"
-            ]
+        ConsistentHashing.new Replica.default (Node.new "node1")
+            |> ConsistentHashing.add (Node.new "node2")
+            |> ConsistentHashing.add (Node.new "node3")
+            |> ConsistentHashing.add (Node.new "node4")
     }
 ```
 
