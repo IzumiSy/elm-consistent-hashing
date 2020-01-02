@@ -41,8 +41,6 @@ remove targetNode (Keys keys) =
     Keys <| Array.filter (\( node, _ ) -> not (Node.toString node == Node.toString targetNode)) keys
 
 
-{-| Looks up all node keys by Binary Search
--}
 find : Key.Key -> Keys -> Maybe Node.Node
 find targetKey ((Keys keys_) as keys) =
     findInternal 0 (Array.length keys_) Nothing targetKey keys
@@ -55,7 +53,7 @@ head (Keys keys) =
         |> Maybe.map Tuple.first
 
 
-{-| Looks up the nearest key by recursive Binary Search
+{-| Looks up the nearest key by recursive Binary Search.
 This is way better in performance using linear search with List in case of many keys.
 -}
 findInternal : Int -> Int -> Maybe Node.Node -> Key.Key -> Keys -> Maybe Node.Node
