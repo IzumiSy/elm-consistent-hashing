@@ -2,6 +2,11 @@
 [![CircleCI](https://circleci.com/gh/IzumiSy/elm-consistent-hashing.svg?style=svg)](https://circleci.com/gh/IzumiSy/elm-consistent-hashing)
 > A pure Elm consistent hashing module
 
+## What is Consistent Hashing?
+> Consistent Hashing is a distributed hashing scheme that operates independently of the number of servers or objects in a distributed hash table by assigning them a position on an abstract circle, or hash ring. This allows servers and objects to scale without affecting the overall system.
+
+https://www.toptal.com/big-data/consistent-hashing
+
 ## Example
 ```elm
 import ConsistentHashing as ConsistentHashing

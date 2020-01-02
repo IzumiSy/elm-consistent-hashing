@@ -86,6 +86,7 @@ add node ((ConsistentHashing { replica, nodes, keys, head }) as ch) =
 {-| Removes a node
 
 This function returns Nothing if all nodes were removed.
+`remove` function internally run linear removing of all replicated virtual nodes so that it possibly results in huge computation cost in case you give a big number of Replica.
 
 -}
 remove : Node.Node -> ConsistentHashing -> Maybe ConsistentHashing
@@ -108,6 +109,9 @@ remove node (ConsistentHashing { replica, nodes, keys, head }) =
 
 
 {-| Gets one node by key
+
+This function is implemented with Array internally so that looking up a possible node is done simply by Binary Search.
+
 -}
 getNode : Key.Key -> ConsistentHashing -> Node.Node
 getNode newKey (ConsistentHashing { nodes, keys, head }) =
